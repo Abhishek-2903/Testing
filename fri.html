@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Army Training Simulator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #e0e0e0;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        .header, .nav {
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            color: #2c3e50;
+        }
+        .nav a {
+            text-decoration: none;
+            color: #3498db;
+            margin: 0 15px;
+            font-size: 1.2em;
+        }
+        .nav a:hover {
+            text-decoration: underline;
+        }
+        .section {
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        .filters {
+            margin-bottom: 20px;
+        }
+        .filters .filter-group {
+            margin-bottom: 15px;
+        }
+        .filters .filter-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        .filters .filter-group select {
+            width: 100%;
+        }
+        .personal-details {
+            display: none;
+            margin-top: 20px;
+        }
+        .personal-details input {
+            margin-bottom: 10px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #777;
+        }
+        .footer a {
+            text-decoration: none;
+            color: #3498db;
+            font-size: 1.1em;
+        }
+        .dashboard, .history {
+            display: flex;
+            height: 600px;
+        }
+        .dashboard .left-side, .history .left-side {
+            width: 30%;
+            padding: 10px;
+            background: #f9f9f9;
+            border-right: 1px solid #ddd;
+            overflow-y: auto;
+        }
+        .dashboard .map, .history .map {
+            width: 40%;
+            height: 100%;
+            background: #f0f0f0;
+            border-radius: 5px;
+            margin: 10px;
+            position: relative;
+        }
+        .dashboard .right-side, .history .filters {
+            width: 30%;
+            padding: 10px;
+            background: #f9f9f9;
+            border-left: 1px solid #ddd;
+            overflow-y: auto;
+        }
+        .right-side .team-row {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+        }
+        .right-side .team-details {
+            display: none;
+            padding: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+        }
+        .right-side .team-row.active + .team-details {
+            display: block;
+        }
+        .filters {
+            margin-bottom: 20px;
+        }
+        .filters select {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 1em;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Army Training Simulator</h1>
+        </div>
+        <div class="nav">
+            <a href="#" onclick="showSection('intro')">Intro</a>
+            <a href="#" onclick="showSection('start')">Start</a>
+            <a href="#" onclick="showSection('dashboard')">Dashboard</a>
+            <a href="#" onclick="showSection('history')">History</a>
+        </div>
+
+        <!-- Intro Page -->
+        <div id="intro" class="section active">
+            <h2>Welcome to the Army Training Simulator</h2>
+            <p>Before starting the simulation, please configure your settings and start the simulation.</p>
+            <button type="button" onclick="showSection('start')">Start Configuration</button>
+        </div>
+
+        <!-- Start Section -->
+        <div id="start" class="section">
+            <h2>Please Add Details</h2>
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="map-type">Type of Map:</label>
+                    <select id="map-type">
+                        <option value="">Select Map</option>
+                        <option value="rajasthan">Rajasthan</option>
+                        <option value="kashmir">Kashmir</option>
+                        <option value="assam">Assam</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="weapon-type">Type of Weapon:</label>
+                    <select id="weapon-type">
+                        <option value="">Select Weapon</option>
+                        <option value="akm">AKM</option>
+                        <option value="insas">INSAS</option>
+                        <option value="pistol">Pistol</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="person-number">Enter Person Number:</label>
+                    <input type="text" id="person-number" placeholder="Enter person number" oninput="togglePersonalDetails()">
+                </div>
+            </div>
+
+            <!-- Personal Details Section -->
+            <div class="personal-details" id="personal-details">
+                <h3>Personal Details</h3>
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" placeholder="Enter name">
+                </div>
+                <div class="form-group">
+                    <label for="rank">Rank:</label>
+                    <input type="text" id="rank" placeholder="Enter rank">
+                </div>
+                <div class="form-group">
+                    <label for="unit">Unit:</label>
+                    <input type="text" id="unit" placeholder="Enter unit">
+                </div>
+                <div class="form-group">
+                    <label for="team-name">Team Name:</label>
+                    <input type="text" id="team-name" placeholder="Enter team name">
+                </div>
+            </div>
+
+            <button type="button" onclick="startSimulation()">Start Simulation</button>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard" class="section">
+            <h2>Dashboard</h2>
+            <div class="dashboard">
+                <div class="left-side">
+                    <h3>Event Logs</h3>
+                    <p>A person hit B</p>
+                    <p>C has been shot out by D</p>
+                    <!-- Additional event logs can go here -->
+                </div>
+                <div class="map">Map Display</div>
+                <div class="right-side">
+                    <h3>Team Details</h3>
+                    <div class="team-row" onclick="toggleDetails(this)">
+                        Team Alpha <span>&darr;</span>
+                    </div>
+                    <div class="team-details">
+                        <p>Details about Team Alpha</p>
+                        <!-- Team details here -->
+                    </div>
+                    <div class="team-row" onclick="toggleDetails(this)">
+                        Team Bravo <span>&darr;</span>
+                    </div>
+                    <div class="team-details">
+                        <p>Details about Team Bravo</p>
+                        <!-- Team details here -->
+                    </div>
+                    <!-- Additional teams can go here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- History Section -->
+        <div id="history" class="section">
+            <h2>History</h2>
+            <div class="filters">
+                <label for="date-filter">Date:</label>
+                <select id="date-filter">
+                    <option value="">Select Date</option>
+                    <option value="2024-07-26">2024-07-26</option>
+                    <option value="2024-07-25">2024-07-25</option>
+                    <!-- Additional dates can go here -->
+                </select>
+                <label for="session-filter">Session:</label>
+                <select id="session-filter">
+                    <option value="">Select Session</option>
+                    <option value="session1">Session 1</option>
+                    <option value="session2">Session 2</option>
+                    <!-- Additional sessions can go here -->
+                </select>
+            </div>
+            <div class="map">Map Display</div>
+        </div>
+
+        <div class="footer">
+            <a href="#" onclick="showSection('intro')">Back to Intro</a> | 
+            <a href="#" onclick="showSection('dashboard')">Go to Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        function startSimulation() {
+            alert('Simulation Started');
+        }
+
+        function togglePersonalDetails() {
+            const personNumber = document.getElementById('person-number').value;
+            const personalDetails = document.getElementById('personal-details');
+            personalDetails.style.display = personNumber ? 'block' : 'none';
+        }
+
+        function toggleDetails(element) {
+            const details = element.nextElementSibling;
+            details.style.display = details.style.display === 'block' ? 'none' : 'block';
+            element.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
